@@ -1,0 +1,45 @@
+<article id="home">
+	<div ng-if="!hayConexion">No hay conexión</div>		
+
+	<img src="img/chico-estudiando.jpg"/>
+
+	<form name="formAgregar" novalidate ng-submit="agregarFechas(fechaExamen)">
+		
+		<label for="n_examenes">Ingresar nuevos exámenes</label>
+		
+		<input type="text" name="n_examenes" ng-model="fechaExamen.materia" ng-maxlength="40" ng-minlength="5" required/> 
+		<span ng-show="formAgregar.n_examenes.$error.required">La materia es required.</span>
+		<div class="row">
+			<div class="col-xs-6">	
+				<label for="fecha">Fecha</label>
+				<input type="text" name="fecha" placeholder="DD/MM/AAAA" ng-model="fechaExamen.dia" required/>
+				<span ng-show="formAgregar.fecha.$error.required">Completar.</span>
+			</div>
+			
+			<div class="col-xs-6">
+				<label for="hora">Hora</label>
+				<input type="text" placeholder="HH:MM" ng-model="fechaExamen.hora" name="hora" />
+			</div>
+		</div>
+		<button type="submit" ng-disabled="formAgregar.$invalid">Agregar</button>
+	</form>
+	<h2>Examenes</h2>
+
+	<table class="tabla">
+		<thead>
+			<tr>
+				<td>Exámen</td><td>Fecha</td><td>Borrar</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="data in fechasExamen">
+				<td>{{data.materia}}</td> <td>{{data.dia|date}} {{data.hora}}hs.</td> 
+				<td><form name="Eliminar" ng-submit="remove(data.id)"><button ng-click="borrarEste2(x)">Borrar</button></form></td>
+			</tr>
+			<!-- <tr ng-repeat="data in recuperar_localStorage">
+				<td>{{data.nombre}}</td> <td>{{data.fecha|date}} {{data.hora}}hs.</td> 
+				<td><button ng-click="borrarEste2(x)">Borrar</button></td>
+			</tr> -->
+		</tbody>
+	</table>   
+</article>

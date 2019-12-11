@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.TestSchedule.rosario"
+        version   = "0.0.1">
+	
+       <name>TestSchedule</name>
+
+    <description>
+        App para guardar fechas de exámenes, horarios de cursada, y notas obtenidas en los exámenes.
+    </description>
+
+    <author  email="maria.carnelli@davinci.edu.ar">
+        	Rosario Carnelli - Escuela Da Vinci
+    </author>
+	
+	<platform name="ios" />
+	<platform name="android" />
+	<platform name="winphone" />
+	<access origin="*"/>
+	<allow-internet href="http://*/*"/>
+	<allow-internet href="https://*/*"/>
+
+    <preference name="permissions" value="none"/>
+		
+	<preference name="phonegap-version" value="cli-6.5.0" />
+	
+    <preference name="orientation" value="portrait" /> 
+	
+    <preference name="target-device" value="universal" /> 
+	
+    <preference name="fullscreen" value="false" /> 
+	
+    <preference name="webviewbounce" value="true" /> 
+	
+  	
+    <preference name="android-minSdkVersion" value="7" /> 
+	
+    <preference name="android-installLocation" value="auto" /> 
+
+	<preference name="splashScreenDelay" value="6000" />
+	<plugin name="cordova-plugin-splashscreen" source="npm" spec="~3.2.1"/>
+	<plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1"/>
+	<plugin name="cordova-plugin-splashscreen" source="npm" />
+	
+	<plugin name="cordova-plugin-statusbar" source="npm"/>
+	<preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#060606" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+	
+
+
+    <icon src="icon.png" />
+	  
+
+  	<gap:splash src="img/splash.png" />
+	
+    
+ 
+    <plugin name="cordova-plugin-whitelist" version="1" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+</widget>

@@ -1,0 +1,70 @@
+form .ng-invalid-required.ng-dirty { background-color: gold; }
+		
+        form .ng-invalid-email.ng-dirty { background-color: indianred; }
+		
+        form .ng-valid.ng-dirty { background-color: lightgreen; }
+		 div.error {color: red; font-weight: bold; margin-top:15px;}
+html{
+	overflow-y: scroll;
+}
+article{
+	text-align: center;
+}
+
+#p_sidebar{
+	text-align: center;
+	margin: 5px;
+	color:white;
+	font-weight: bold;
+}
+form{
+	width: 90%;
+	margin: auto;
+	text-align: left;
+}
+form input[type=text]{
+	width: 100%;
+	margin: 2px;
+	height: 35px;
+}
+label{
+	margin-bottom:0;
+}
+select{
+	margin: 2px;
+	width: 60%;
+	height: 40px;
+	
+	
+}
+select option{
+	width: 20px;
+}
+form input[type=submit]{
+	margin: 2px;
+	display: block;
+	float: right;
+	padding: 10px;
+}
+.tabla{
+	border: 1px solid black;
+	width: 90%;
+	margin: auto;
+	background: #bbbbbb;
+}
+tr, td{
+	border: 1px solid black;
+	padding: 2px;
+}
+h1,h2{
+	text-align: center;
+	margin: 4px;
+}
+.app-content{
+	margin-top: 50px;
+}
+.notas_S{display: inline-block !important;
+}
+.container{
+	padding: 0!important;
+}

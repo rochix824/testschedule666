@@ -1,0 +1,28 @@
+<article>
+	<img src="img/buenasnotas.jpg"/>
+<h2>Notas</h2>
+
+	<form novalidate name="form3" ng-submit="agregarNotas(notas)">
+		<label for="n_materia">Materia:</label>
+			<input type="text" name="n_materia" required ng-model="notas.materia" ng-maxlength="40" ng-minlength="5"/>
+				<span class="error" ng-show="form3.n_materia.$error.required">Completar.</span>
+		
+		<label for="nota">Nota:</label>
+			<input type="text" name="nota" required ng-model="notas.nota" ng-pattern="/^([1-9]|10)$/"/>
+				<span class="error" ng-show="form3.nota.$error.required">Completar.</span>
+				<span  ng-show="form3.nota.$error.pattern">Numero no valido!</span>
+		
+		<input type="submit" value="ok" class="notas_S" ng-disabled="form3.$invalid"/>
+
+	</form>
+	<table class="tabla">
+		<thead><tr><td>Materia</td><td>Nota</td></tr></thead>
+
+		<tbody><tr ng-repeat="data in notas">
+			
+			<td>{{data}}</td> <td>{{data.nota}}</td> 
+		
+			<td><button ng-click="borrarEste(x)">Borrar</button></td></tr>
+		</tbody>
+	</table>
+</article>

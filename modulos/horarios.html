@@ -1,0 +1,39 @@
+<article>
+<img src="img/horarios.jpg"/>
+<h2>Horarios</h2>
+
+<form name="form2" novalidate ng-submit="nuevoHorario(horario)">
+<label for="materia">Ingresar Materia</label>
+<input type="text" name="materia" required ng-model="horario.materia" ng-maxlength="40" ng-minlength="5"/>
+<span class="error" ng-show="form2.materia.$error.required">Completar.</span>
+
+<label for="dia">Dia:</label>
+<select name="dia" required ng-model="horario.dia"  ng-options="item for item in dia_s" >
+<option value="">
+</option>
+</select>
+<span class="error" ng-if="form2.dia.$error.required">Completar.</span>
+<br/>
+<label for="hora">Horario:</label>
+<input type="text" placeholder="HH:MM" name="hora" ng-model="horario.hora">
+<span class="error" ng-if="form2.hora.$error.required">Completar.</span>
+<input type="submit" ng-disabled="form2.$invalid" value="Ok"/>
+</form>
+<table class="tabla">
+	<thead>
+		<tr>
+			<td>Materia</td>
+			<td>Día</td>
+			<td>Horario</td>
+
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="data in horarios">
+		<td>{{data.materia}}</td> <td>{{data.dia}}</td> <td>{{data.hora}}hs</td> 
+		<td><button ng-click="borrarEste3(x)">Borrar</button></td>
+	</tr>
+	</tbody>
+</table>
+
+</article>
