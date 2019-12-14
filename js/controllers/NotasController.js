@@ -2,25 +2,25 @@ app.controller("NotasController", function($scope, $http) {
 
 	$scope.hayConexion = true,
 
-	$http.get('api/notas.php')
+	$http.get('http://testschedule.atwebpages.com/notas.php')
 		.then(
 			function(respuesta){
 				$scope.notas = respuesta.data;
 				localStorage.notas = JSON.stringify($scope.notas);
 
-				if(localStorage.pendingToAdd){
-					$http.post('api/notas.php', {notas: JSON.parse(localStorage.pendingToAdd)})
+				if(localStorage.pendingToAdd_notas){
+					$http.post('http://testschedule.atwebpages.com/notas.php', {notas: JSON.parse(localStorage.pendingToAdd_notas)})
 						.then(function(respuesta){
-							localStorage.removeItem('pendingToAdd');
+							localStorage.removeItem('pendingToAdd_notas');
 						}, function(respuesta){
-							$scope.notas = $scope.notas.concat(JSON.parse(localStorage.pendingToAdd));
+							$scope.notas = $scope.notas.concat(JSON.parse(localStorage.pendingToAdd_notas));
 						});
 				}
 			}, function (respuesta){
 				$scope.notas = JSON.parse(localStorage.notas);
 
-				if(localStorage.pendingToAdd){
-					$scope.notas = $scope.nota.concat(JSON.parse(localStorage.pendingToAdd));
+				if(localStorage.pendingToAdd_notas){
+					$scope.notas = $scope.nota.concat(JSON.parse(localStorage.pendingToAdd_notas));
 				}
 				$scope.hayConexion = false;
 			}
@@ -32,7 +32,7 @@ app.controller("NotasController", function($scope, $http) {
 			nota: nota.nota
 		}
 
-		$http.post('api/notas.php', $scope.data)
+		$http.post('http://testschedule.atwebpages.com/notas.php', $scope.data)
 			.then(function(respuesta){
 				console.log(respuesta);
 				$scope.notas.push(respuesta.data);
@@ -40,13 +40,13 @@ app.controller("NotasController", function($scope, $http) {
 
 			},function(respuesta){
 				let notas;
-				if(localStorage.pendingToAdd){
-					notas = JSON.parse(localStorage.pendingToAdd);
+				if(localStorage.pendingToAdd_notas){
+					notas = JSON.parse(localStorage.pendingToAdd_notas);
 				}else{
 					notas = [];
 				}
 				notas.push($scope.data);
-				localStorage.pendingToAdd = JSON.stringify(notas);
+				localStorage.pendingToAdd_notas = JSON.stringify(notas);
 				$scope.notas.push($scope.data);
 			});
 
@@ -55,8 +55,8 @@ app.controller("NotasController", function($scope, $http) {
 	{
 		var iToRemove, 
 			removed = false;
-		if(localStorage.getItem('pendingToAdd') !== null) {
-			var pending = JSON.parse(localStorage.pendingToAdd);
+		if(localStorage.getItem('pendingToAdd_notas') !== null) {
+			var pending = JSON.parse(localStorage.pendingToAdd_notas);
 			for(var i = 0; i < pending.length; i++) {
 				if(pending[i].id == id) {
 					iToRemove = i;
@@ -65,7 +65,7 @@ app.controller("NotasController", function($scope, $http) {
 			if(iToRemove) {
 				removed = true;
 				pending.splice(iToRemove, 1);
-				localStorage.pendingToAdd = JSON.stringify(pending);
+				localStorage.pendingToAdd_notas = JSON.stringify(pending);
 			}
 		}
 		if(!removed) {
@@ -79,20 +79,20 @@ app.controller("NotasController", function($scope, $http) {
 				removed = true;
 				notas.splice(iToRemove, 1);
 				localStorage.notas = JSON.stringify(notas);
-				$http.delete('api/notas.php?id=' + id)
+				$http.delete('http://testschedule.atwebpages.com/notas.php?id=' + id)
 					.then(function(respuesta) {
 						if(respuesta.data.success) {
 							recrearArrayNotas();
 						}
 					},
 					function(respuesta) {
-						if(localStorage.getItem('pendingToDelete') === null) {
-							var pendingToDelete = [];
+						if(localStorage.getItem('pendingToDelete_notas') === null) {
+							var pendingToDelete_notas = [];
 						} else {
-							var pendingToDelete = JSON.parse(localStorage.pendingToDelete);
+							var pendingToDelete_notas = JSON.parse(localStorage.pendingToDelete_notas);
 						}
-						pendingToDelete.push(id);
-						localStorage.pendingToDelete = JSON.stringify(pendingToDelete);
+						pendingToDelete_notas.push(id);
+						localStorage.pendingToDelete_notas = JSON.stringify(pendingToDelete_notas);
 					});
 			}
 		}
@@ -106,13 +106,13 @@ app.controller("NotasController", function($scope, $http) {
 			$scope.notasCursada = JSON.parse(localStorage.notas);
 		}
 
-		if(localStorage.getItem('pendingToAdd')) {
-			$scope.notasCursada = $scope.notasCursada.concat(JSON.parse(localStorage.pendingToAdd));
+		if(localStorage.getItem('pendingToAdd_notas')) {
+			$scope.notasCursada = $scope.notasCursada.concat(JSON.parse(localStorage.pendingToAdd_notas));
 		}
 
 		// Si hay items que eliminar pendientes.
-		// if(localStorage.pendingToDelete) {
-		// 	var idsToDelete = JSON.parse(localStorage.pendingToDelete);
+		// if(localStorage.pendingToDelete_notas) {
+		// 	var idsToDelete = JSON.parse(localStorage.pendingToDelete_notas);
 		// 	var iToDelete = [];
 		// 	for(var i = 0; i < $scope.fechasExamen.length; i++) {
 				
