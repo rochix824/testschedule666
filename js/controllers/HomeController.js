@@ -108,11 +108,9 @@ app.controller("HomeController", function($scope, $http) {
 			}
 			if(iToRemove) {
 				removed = true;
-				console.log("Examenes no filtrados: ", examenes);
 				examenes.splice(iToRemove, 1);
 				localStorage.examenes = JSON.stringify(examenes);
 
-				console.log("Examenes filtrados: ", examenes);
 
 				//$http.delete('api/examenes.php?id=' + id)
 				$http.delete('http://testschedule.atwebpages.com/examenes.php?id=' + id)
