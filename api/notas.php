@@ -1,4 +1,5 @@
 <?php
+// header("Access-Control-Allow-Origin:*");
 require 'DBConnection.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -21,7 +22,12 @@ switch($method){
     break;
 
     case 'DELETE':
-     remove($_POST);
+        if(isset($_GET['id'])) {
+            remove($_GET['id']);
+        } else if(isset($_GET['ids'])) {
+            $ids = json_decode($_GET['ids']);
+            removeAll($ids);
+        }
     break;
  
 }
@@ -41,7 +47,37 @@ function getNotas(){
 function add ($data){
     global $cnx;
     $sql = "INSERT INTO notas (materia, nota) VALUE ('$data[materia]', '$data[nota]')";
-    $result = mysqli_query($cnx, $sql);
-    echo json_encode($result);
+    $exito = mysqli_query($cnx, $sql);
     
+    if($exito){
+        $data['id'] = mysqli_insert_id($cnx);
+        echo json_encode($data);
+    }else{
+        echo json_encode(['success' => false]);
+    }
+    
+}
+function remove($id){
+    global $cnx;
+    $id = mysqli_real_escape_string($cnx, $id);
+    $sql = "DELETE FROM notas WHERE id = '" . $id . "'";
+    //echo $sql;
+    $exito = mysqli_query($cnx, $sql);
+
+    echo json_encode([
+        'success' => $exito
+    ]);
+}
+
+function removeAll($ids){
+    global $cnx;
+    $list = implode(', ', $ids);
+    $list = mysqli_real_escape_string($cnx, $list);
+    $sql = "DELETE FROM notas WHERE id IN (" . $list . ")";
+    //echo $sql;
+    $exito = mysqli_query($cnx, $sql);
+
+    echo json_encode([
+        'success' => $exito
+    ]);
 }

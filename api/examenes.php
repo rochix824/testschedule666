@@ -1,6 +1,7 @@
 <?php
+// header("Access-Control-Allow-Origin: *");
 require 'DBConnection.php';
-header("Access-Control-Allow-Origin:*");
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch($method){
@@ -27,7 +28,12 @@ switch($method){
     break;
 
     case 'DELETE':
-     remove($_POST);
+        if(isset($_GET['id'])) {
+            remove($_GET['id']);
+        } else if(isset($_GET['ids'])) {
+            $ids = json_decode($_GET['ids']);
+            removeAll($ids);
+        }
     break;
  
 }
@@ -49,13 +55,37 @@ function add($data){
     // var_dump($data);
     $sql = "INSERT INTO examenes (materia, dia, hora) VALUE ( '$data[materia]', '$data[dia]', '$data[hora]')";
     // var_dump($sql);
-    $result = mysqli_query($cnx, $sql);
+    $exito = mysqli_query($cnx, $sql);
 
-    echo json_encode($result);
+    if($exito) {
+        $data['id'] = mysqli_insert_id($cnx);
+        echo json_encode($data);
+    } else {
+        echo json_encode(['success' => false]);
+    }
 }
 
-function remove($data){
+function remove($id){
     global $cnx;
-    //$sql = "DELETE FROM examanes WHERE "
-    var_dump($data);
+    $id = mysqli_real_escape_string($cnx, $id);
+    $sql = "DELETE FROM examenes WHERE id = '" . $id . "'";
+    //echo $sql;
+    $exito = mysqli_query($cnx, $sql);
+
+    echo json_encode([
+        'success' => $exito
+    ]);
+}
+
+function removeAll($ids){
+    global $cnx;
+    $list = implode(', ', $ids);
+    $list = mysqli_real_escape_string($cnx, $list);
+    $sql = "DELETE FROM examenes WHERE id IN (" . $list . ")";
+    //echo $sql;
+    $exito = mysqli_query($cnx, $sql);
+
+    echo json_encode([
+        'success' => $exito
+    ]);
 }

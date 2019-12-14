@@ -31,7 +31,7 @@
 	<tbody>
 	<tr ng-repeat="data in horarios">
 		<td>{{data.materia}}</td> <td>{{data.dia}}</td> <td>{{data.hora}}hs</td> 
-		<td><button ng-click="borrarEste3(x)">Borrar</button></td>
+		<td><button ng-click="borrarEste(data.id)">Borrar</button></td>
 	</tr>
 	</tbody>
 </table>

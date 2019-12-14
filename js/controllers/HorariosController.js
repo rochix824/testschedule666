@@ -5,8 +5,8 @@ app.controller("HorariosController", function($scope, $http)
 	$http.get("api/horarios.php")
 		.then(
 			function (respuesta){
-				$scope.horario = respuesta.data;
-				localStorage.horarios = JSON.stringify($scope.horario);
+				$scope.horarios = respuesta.data;
+				localStorage.horarios = JSON.stringify($scope.horarios);
 
 				if(localStorage.pendingToAdd) {
 					$http.post('api/horarios.php', {horarios: JSON.parse(localStorage.pendingToAdd)})
@@ -14,14 +14,14 @@ app.controller("HorariosController", function($scope, $http)
 							function(respuesta){
 								localStorage.removeItem('pendingToAdd');
 							},function (respuesta){
-								$scope.horario = $scope.horario.concat(JSON.parse(localStorage.pendingToAdd));
+								$scope.horarios = $scope.horarios.concat(JSON.parse(localStorage.pendingToAdd));
 							}
 						);
 				}
 			}, function (respuesta){
-				$scope.horario = JSON.parse(localStorage.horarios);
+				$scope.horarios = JSON.parse(localStorage.horarios);
 				if(localStorage.pendingToAdd) {
-					$scope.horario = $scope.horario.concat(JSON.parse(localStorage.pendingToAdd));
+					$scope.horarios = $scope.horarios.concat(JSON.parse(localStorage.pendingToAdd));
 				}
 				$scope.hayConexion = false;
 			}
@@ -29,15 +29,15 @@ app.controller("HorariosController", function($scope, $http)
 		$scope.nuevoHorario = function(horario)
 		{
 			$scope.data = {
-				materia: $scope.horario.materia,
-				dia: $scope.horario.dia,
-				hora: $scope.horario.hora
+				materia: horario.materia,
+				dia: horario.dia,
+				hora: horario.hora
 			}
 
 			$http.post('api/horarios.php', $scope.data)
 				.then(
 					function(respuesta){
-						$scope.horario.push(respuesta.data);
+						$scope.horarios.push(respuesta.data);
 						localStorage.setItem('horarios', JSON.stringify($scope.horario));
 					},function(respuesta){
 						let horarios;
@@ -49,42 +49,76 @@ app.controller("HorariosController", function($scope, $http)
 						
 						horarios.push($scope.data);
 						localStorage.pendingToAdd = JSON.stringify(horarios);
-						$scope.horario.push($scope.data);
+						$scope.horarios.push($scope.data);
 					}
 				);
 		}
-
-	// // $scope.nuevoHorario = function()
-	// // {
-	// // 	if (!localStorage.getItem("horarios")){
-	// // 		$scope.array_para_horarios =[];
-	// // 	}else{
-	// // 		$scope.array_para_horarios = JSON.parse(localStorage.horarios);
-	// // 		}
-				
-	// // 	$scope.data2 = 
-	// // 	{
-	// // 		materia: $scope.h_materia,
-	// // 		horario: $scope.h_hora, 
-	// // 		diaa : $scope.diaa
-	// // 	}
-	// // 	$scope.array_para_horarios.push($scope.data2);
-	// // 	localStorage.setItem("horarios", JSON.stringify($scope.array_para_horarios));			 
-	// // }
-			
- $scope.recuperar_localStorage2= JSON.parse(localStorage.getItem("horarios"));
-		
-		
-	$scope.borrarEste3 = function(x)
-	{
-		localStorage.removeItem("horarios");
-		$scope.recuperar_localStorage2.splice($scope.recuperar_localStorage2.indexOf(x), 1);
-		$scope.queda_datos = [];
+		$scope.borrarEste = function(id)
+		{
+			var iToRemove, 
+				removed = false;
+			if(localStorage.getItem('pendingToAdd') !== null) {
+				var pending = JSON.parse(localStorage.pendingToAdd);
+				for(var i = 0; i < pending.length; i++) {
+					if(pending[i].id == id) {
+						iToRemove = i;
+					}
+				}
+				if(iToRemove) {
+					removed = true;
+					pending.splice(iToRemove, 1);
+					localStorage.pendingToAdd = JSON.stringify(pending);
+				}
+			}
+			if(!removed) {
+				var horarios = JSON.parse(localStorage.horarios);
+				for(var i = 0; i < horarios.length; i++) {
+					if(horarios[i].id == id) {
+						iToRemove = i;
+					}
+				}
+				if(iToRemove) {
+					removed = true;
+					horarios.splice(iToRemove, 1);
+					localStorage.horarios = JSON.stringify(horarios);
+					$http.delete('api/horarios.php?id=' + id)
+						.then(function(respuesta) {
+							if(respuesta.data.success) {
+								recrearArrayHorarios();
+							}
+						},
+						function(respuesta) {
+							if(localStorage.getItem('pendingToDelete') === null) {
+								var pendingToDelete = [];
+							} else {
+								var pendingToDelete = JSON.parse(localStorage.pendingToDelete);
+							}
+							pendingToDelete.push(id);
+							localStorage.pendingToDelete = JSON.stringify(pendingToDelete);
+						});
+				}
+			}
 	
-		angular.forEach($scope.recuperar_localStorage2, function(x)
-		{					
-			$scope.queda_datos.push(x);
-			localStorage.setItem("horarios", JSON.stringify($scope.queda_datos));
-		});
-	}	
+			recrearArrayHorarios();
+		}
+		function recrearArrayHorarios() {
+			$scope.horariosCursada = [];
+	
+			if(localStorage.getItem('horarios')) {
+				$scope.horariosCursada = JSON.parse(localStorage.horarios);
+			}
+	
+			if(localStorage.getItem('pendingToAdd')) {
+				$scope.horariosCursada = $scope.horariosCursada.concat(JSON.parse(localStorage.pendingToAdd));
+			}
+	
+			// Si hay items que eliminar pendientes.
+			// if(localStorage.pendingToDelete) {
+			// 	var idsToDelete = JSON.parse(localStorage.pendingToDelete);
+			// 	var iToDelete = [];
+			// 	for(var i = 0; i < $scope.fechasExamen.length; i++) {
+					
+			// 	}
+			// }
+		}
 });

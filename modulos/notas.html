@@ -2,13 +2,13 @@
 	<img src="img/buenasnotas.jpg"/>
 <h2>Notas</h2>
 
-	<form novalidate name="form3" ng-submit="agregarNotas(notas)">
+	<form novalidate name="form3" ng-submit="agregarNotas(nota)">
 		<label for="n_materia">Materia:</label>
-			<input type="text" name="n_materia" required ng-model="notas.materia" ng-maxlength="40" ng-minlength="5"/>
+			<input type="text" name="n_materia" required ng-model="nota.materia" ng-maxlength="40" ng-minlength="5"/>
 				<span class="error" ng-show="form3.n_materia.$error.required">Completar.</span>
 		
 		<label for="nota">Nota:</label>
-			<input type="text" name="nota" required ng-model="notas.nota" ng-pattern="/^([1-9]|10)$/"/>
+			<input type="text" name="nota" required ng-model="nota.nota" ng-pattern="/^([1-9]|10)$/"/>
 				<span class="error" ng-show="form3.nota.$error.required">Completar.</span>
 				<span  ng-show="form3.nota.$error.pattern">Numero no valido!</span>
 		
@@ -20,9 +20,9 @@
 
 		<tbody><tr ng-repeat="data in notas">
 			
-			<td>{{data}}</td> <td>{{data.nota}}</td> 
+			<td>{{data.materia}}</td> <td>{{data.nota}}</td> 
 		
-			<td><button ng-click="borrarEste(x)">Borrar</button></td></tr>
+			<td><button ng-click="borrarEste(data.id)">Borrar</button></td></tr>
 		</tbody>
 	</table>
 </article>
