@@ -13,7 +13,6 @@ app.controller("HomeController", function($scope, $http) {
 					 $http.post('http://testschedule.atwebpages.com/examenes.php', {materias: JSON.parse(localStorage.pendingToAdd_examenes)})
 					//$http.post('api/examenes.php', {materias: JSON.parse(localStorage.pendingToAdd_examenes)})
 						.then(function(respuesta) {
-							console.log(respuesta);
 							localStorage.removeItem('pendingToAdd_examenes');
 						}, function(respuesta) {
 							$scope.fechasExamen = $scope.fechasExamen.concat(JSON.parse(localStorage.pendingToAdd_examenes));
